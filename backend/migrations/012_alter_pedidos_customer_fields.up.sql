@@ -1,0 +1,4 @@
+ALTER TABLE pedidos
+    ADD COLUMN IF NOT EXISTS customer_name VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS customer_email VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS customer_phone VARCHAR(20);

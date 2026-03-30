@@ -41,7 +41,7 @@ func main() {
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     cfg.CORSOrigins,
 		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-		AllowHeaders:     "Origin,Content-Type,Accept,Authorization",
+		AllowHeaders:     "Origin,Content-Type,Accept,Authorization,X-Session-ID,X-Webhook-Signature",
 		AllowCredentials: true,
 	}))
 
@@ -67,6 +67,21 @@ func main() {
 	// Catálogo público (sem auth)
 	app.Get("/api/v1/public/catalog", handler.PublicCatalog)
 
+	// Carrinho (público, session-based)
+	app.Post("/api/v1/cart/add", handler.AddToCart)
+	app.Put("/api/v1/cart/update/:id", handler.UpdateCartItem)
+	app.Delete("/api/v1/cart/remove/:id", handler.RemoveCartItem)
+	app.Get("/api/v1/cart", handler.GetCart)
+
+	// Checkout (público)
+	app.Post("/api/v1/checkout", handler.Checkout)
+
+	// Validação de cupom (público por store)
+	app.Post("/api/v1/coupons/validate", handler.ValidateCoupon)
+
+	// Webhook de pagamento
+	app.Post("/api/v1/webhooks/payment", handler.PaymentWebhook(cfg.WebhookSecret))
+
 	// Rotas protegidas por JWT
 	api := app.Group("/api/v1", middleware.JWTAuth(cfg.JWTSecret))
 
@@ -89,6 +104,18 @@ func main() {
 
 	// Estoque
 	api.Get("/stock/alerts", handler.GetLowStockAlert)
+
+	// Pedidos (admin)
+	api.Get("/orders", handler.ListOrders)
+	api.Get("/orders/:id", handler.GetOrder)
+	api.Put("/orders/:id/status", handler.UpdateOrderStatus)
+
+	// Cupons (admin CRUD)
+	api.Post("/coupons", handler.CreateCoupon)
+	api.Get("/coupons", handler.ListCoupons)
+	api.Get("/coupons/:id", handler.GetCoupon)
+	api.Put("/coupons/:id", handler.UpdateCoupon)
+	api.Delete("/coupons/:id", handler.DeleteCoupon)
 
 	log.Printf("StoreMaker API rodando na porta %s", cfg.Port)
 	if err := app.Listen(":" + cfg.Port); err != nil {

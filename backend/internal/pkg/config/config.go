@@ -7,11 +7,12 @@ import (
 )
 
 type Config struct {
-	Env         string
-	Port        string
-	DatabaseURL string
-	JWTSecret   string
-	CORSOrigins string
+	Env            string
+	Port           string
+	DatabaseURL    string
+	JWTSecret      string
+	CORSOrigins    string
+	WebhookSecret  string
 }
 
 func Load() *Config {
@@ -22,7 +23,8 @@ func Load() *Config {
 		Port:        getEnv("PORT", "3080"),
 		DatabaseURL: getEnv("DATABASE_URL", ""),
 		JWTSecret:   getEnv("JWT_SECRET", ""),
-		CORSOrigins: getEnv("CORS_ORIGINS", "*"),
+		CORSOrigins:   getEnv("CORS_ORIGINS", "*"),
+		WebhookSecret: getEnv("WEBHOOK_SECRET", ""),
 	}
 }
 
