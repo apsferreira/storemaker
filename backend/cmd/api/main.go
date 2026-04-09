@@ -58,6 +58,9 @@ func main() {
 		},
 	}))
 
+	// Resolve loja pelo domínio customizado para requests de storefronts externos (BKL-143)
+	app.Use(middleware.DomainResolver())
+
 	// Servir uploads estáticos
 	app.Static("/uploads", "./uploads")
 
@@ -101,6 +104,11 @@ func main() {
 	api.Put("/products/reorder", handler.ReorderProducts)
 	api.Post("/products/:id/photos", handler.UploadProductPhotos)
 	api.Post("/products/import", handler.ImportProductsCSV)
+
+	// Domínio customizado por loja (BKL-143)
+	api.Put("/stores/:id/domain", handler.SetStoreDomain)
+	api.Post("/stores/:id/domain/verify", handler.VerifyStoreDomain)
+	api.Delete("/stores/:id/domain", handler.RemoveStoreDomain)
 
 	// Estoque
 	api.Get("/stock/alerts", handler.GetLowStockAlert)

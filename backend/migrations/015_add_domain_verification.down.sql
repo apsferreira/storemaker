@@ -1,0 +1,6 @@
+-- DOWN: desfaz BKL-143
+-- DROP INDEX IF EXISTS idx_lojas_domain_custom;
+-- ALTER TABLE lojas
+--     DROP COLUMN IF EXISTS domain_verified,
+--     DROP COLUMN IF EXISTS domain_verification_token,
+--     DROP COLUMN IF EXISTS domain_verified_at;
