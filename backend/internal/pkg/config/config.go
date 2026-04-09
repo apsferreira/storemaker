@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -19,13 +20,23 @@ func Load() *Config {
 	_ = godotenv.Load()
 
 	return &Config{
-		Env:         getEnv("ENV", "development"),
-		Port:        getEnv("PORT", "3080"),
-		DatabaseURL: getEnv("DATABASE_URL", ""),
-		JWTSecret:   getEnv("JWT_SECRET", ""),
-		CORSOrigins:   getEnv("CORS_ORIGINS", "*"),
+		Env:           getEnv("ENV", "development"),
+		Port:          getEnv("PORT", "3080"),
+		DatabaseURL:   getEnv("DATABASE_URL", ""),
+		JWTSecret:     getEnv("JWT_SECRET", ""),
+		CORSOrigins:   requireEnv("CORS_ORIGINS"), // BKL-107: sem wildcard default — segurança
 		WebhookSecret: getEnv("WEBHOOK_SECRET", ""),
 	}
+}
+
+// requireEnv retorna o valor da variável ou encerra o processo com log.Fatal.
+// BKL-107: usar para variáveis críticas de segurança sem default inseguro.
+func requireEnv(key string) string {
+	v := os.Getenv(key)
+	if v == "" {
+		log.Fatalf("variável de ambiente obrigatória não definida: %s", key)
+	}
+	return v
 }
 
 func getEnv(key, fallback string) string {
