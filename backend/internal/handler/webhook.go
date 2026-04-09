@@ -13,22 +13,29 @@ import (
 )
 
 // PaymentWebhook recebe notificações de pagamento do checkout-service.
+// BKL-459: WEBHOOK_SECRET é obrigatório — rejeitar se não configurado.
 func PaymentWebhook(webhookSecret string) fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		// Verificar assinatura do webhook
+		// Secret não configurado = misconfiguration — rejeitar para não processar webhooks não autenticados
+		if webhookSecret == "" {
+			log.Error().Msg("webhook: WEBHOOK_SECRET não configurado — rejeitando request")
+			return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{"error": "webhook não configurado"})
+		}
+
+		// Verificar assinatura HMAC-SHA256
 		signature := c.Get("X-Webhook-Signature")
-		if webhookSecret != "" && signature != "" {
-			body := c.Body()
-			mac := hmac.New(sha256.New, []byte(webhookSecret))
-			mac.Write(body)
-			expected := hex.EncodeToString(mac.Sum(nil))
-			if !hmac.Equal([]byte(signature), []byte(expected)) {
-				log.Warn().Msg("webhook: assinatura inválida")
-				return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "assinatura inválida"})
-			}
-		} else if webhookSecret != "" && signature == "" {
+		if signature == "" {
 			log.Warn().Msg("webhook: assinatura ausente")
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "assinatura ausente"})
+		}
+
+		body := c.Body()
+		mac := hmac.New(sha256.New, []byte(webhookSecret))
+		mac.Write(body)
+		expected := hex.EncodeToString(mac.Sum(nil))
+		if !hmac.Equal([]byte(signature), []byte(expected)) {
+			log.Warn().Msg("webhook: assinatura inválida")
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "assinatura inválida"})
 		}
 
 		var payload model.PaymentWebhookPayload
