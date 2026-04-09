@@ -23,7 +23,7 @@ func Load() *Config {
 		Env:           getEnv("ENV", "development"),
 		Port:          getEnv("PORT", "3080"),
 		DatabaseURL:   getEnv("DATABASE_URL", ""),
-		JWTSecret:     getEnv("JWT_SECRET", ""),
+		JWTSecret:     requireEnv("JWT_SECRET"), // BKL-114: sem fallback — segredo crítico
 		CORSOrigins:   requireEnv("CORS_ORIGINS"), // BKL-107: sem wildcard default — segurança
 		WebhookSecret: getEnv("WEBHOOK_SECRET", ""),
 	}
