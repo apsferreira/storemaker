@@ -1,15 +1,15 @@
 const API_BASE = '/api/v1'
 
 function getToken(): string | null {
-  return localStorage.getItem('sm_token')
+  return sessionStorage.getItem('sm_token')
 }
 
 export function setToken(token: string) {
-  localStorage.setItem('sm_token', token)
+  sessionStorage.setItem('sm_token', token)
 }
 
 export function clearToken() {
-  localStorage.removeItem('sm_token')
+  sessionStorage.removeItem('sm_token')
 }
 
 export function isAuthenticated(): boolean {
