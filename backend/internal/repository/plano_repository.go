@@ -7,7 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/apsferreira/storemake/backend/internal/domain"
+	"github.com/apsferreira/storemaker/internal/domain"
 )
 
 type PlanoRepository struct {

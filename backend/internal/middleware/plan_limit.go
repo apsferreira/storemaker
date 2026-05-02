@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 
-	"github.com/apsferreira/storemake/backend/internal/repository"
+	"github.com/apsferreira/storemaker/internal/repository"
 )
 
 // PlanLimitValidator valida se a loja respeita o limite de produtos do seu plano

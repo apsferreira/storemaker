@@ -6,7 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
-	"github.com/apsferreira/storemake/backend/internal/repository"
+	"github.com/apsferreira/storemaker/internal/repository"
 )
 
 // PlanoHandler gerencia as rotas de planos
