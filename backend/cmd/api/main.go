@@ -75,6 +75,16 @@ func main() {
 	// Nota: ModuleGuard no catálogo público usa store_id do domínio resolvido pelo DomainResolver
 	app.Get("/api/v1/public/catalog", handler.PublicCatalog)
 
+	// Planos públicos (pricing page + registro)
+	planoHandler := handler.NewPlanoHandler(database.DB)
+	app.Get("/api/v1/public/plans", planoHandler.ListPricing)
+	app.Get("/api/v1/public/plans/:slug", planoHandler.GetBySlug)
+
+	// SM-003: Registro de novas lojas via OTP
+	app.Post("/api/v1/public/register", handler.Register(cfg.JWTSecret))
+	app.Get("/api/v1/public/check-slug", handler.CheckSlug)
+	app.Get("/api/v1/public/suggest-slug", handler.SuggestSlug)
+
 	// Carrinho (público, session-based)
 	app.Post("/api/v1/cart/add", handler.AddToCart)
 	app.Put("/api/v1/cart/update/:id", handler.UpdateCartItem)

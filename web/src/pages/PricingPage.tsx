@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Check, X } from 'lucide-react';
+import { Check, X, Zap, Globe, ShieldCheck, Headphones } from 'lucide-react';
 
 interface Plano {
   id: string;
@@ -13,6 +13,12 @@ interface Plano {
   features: Record<string, boolean>;
 }
 
+const supportLabel: Record<string, string> = {
+  community: 'Comunidade',
+  email: 'Email',
+  priority: 'Prioritario',
+};
+
 export function PricingPage() {
   const [planos, setPlanos] = useState<Plano[]>([]);
   const [loading, setLoading] = useState(true);
@@ -23,131 +29,148 @@ export function PricingPage() {
         const response = await fetch('/api/v1/public/plans');
         const data = await response.json();
         setPlanos(data.data || []);
-      } catch (error) {
-        console.error('Erro ao buscar planos:', error);
+      } catch {
+        // silencioso
       } finally {
         setLoading(false);
       }
     };
-
     fetchPlanos();
   }, []);
 
   const featuresList = [
-    { key: 'frete', label: 'Cálculo de frete integrado' },
-    { key: 'cupons', label: 'Cupons de desconto' },
-    { key: 'whatsapp', label: 'Integração WhatsApp' },
-    { key: 'crm', label: 'Sistema de CRM' },
+    { key: 'frete', label: 'Calculo de frete integrado', icon: Globe },
+    { key: 'cupons', label: 'Cupons de desconto', icon: Zap },
+    { key: 'whatsapp', label: 'Integracao WhatsApp', icon: ShieldCheck },
+    { key: 'crm', label: 'Sistema de CRM', icon: Headphones },
   ];
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">Carregando planos...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 rounded-full border-2 border-violet-200 border-t-violet-600 animate-spin" />
+          <p className="text-sm text-gray-500">Carregando planos...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Planos para sua loja virtual
+    <div className="min-h-screen bg-white">
+      {/* Hero */}
+      <div
+        className="py-16 sm:py-20 px-4 text-center relative overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #1e0a3c 0%, #3b1f6b 100%)' }}
+      >
+        <div
+          className="absolute inset-0 opacity-10"
+          style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, #7c3aed, transparent 60%), radial-gradient(circle at 75% 20%, #a855f7, transparent 50%)' }}
+          aria-hidden="true"
+        />
+        <div className="relative max-w-2xl mx-auto">
+          <span className="inline-flex items-center gap-1.5 bg-violet-500/20 text-violet-300 text-xs font-semibold px-3 py-1 rounded-full border border-violet-500/30 mb-4">
+            <Zap size={12} />
+            Precos simples e transparentes
+          </span>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+            Escolha o plano certo<br className="hidden sm:block" /> para sua loja
           </h1>
-          <p className="text-xl text-gray-600">
-            Escolha o plano perfeito para começar a vender online
+          <p className="text-violet-200/70 text-base sm:text-lg">
+            Comece gratis. Cresça sem limites. Cancele quando quiser.
           </p>
         </div>
+      </div>
 
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         {/* Pricing Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {planos.map((plano) => {
             const isPopular = plano.slug === 'starter';
             const isFree = plano.slug === 'free';
-            const isPro = plano.slug === 'pro';
 
             return (
               <div
                 key={plano.id}
-                className={`relative rounded-lg shadow-lg overflow-hidden transition-transform hover:scale-105 ${
-                  isPopular ? 'ring-2 ring-blue-500 md:scale-105' : ''
-                } ${isFree ? 'bg-gray-100' : 'bg-white'} ${
-                  isPro ? 'bg-gradient-to-br from-blue-50 to-blue-100' : ''
+                className={`relative rounded-2xl overflow-hidden transition-all duration-200 ${
+                  isPopular
+                    ? 'ring-2 ring-violet-500 shadow-xl shadow-violet-500/10 lg:-translate-y-2'
+                    : 'ring-1 ring-gray-200 shadow-sm hover:shadow-md'
                 }`}
               >
+                {/* Popular badge */}
                 {isPopular && (
-                  <div className="absolute top-0 right-0 bg-blue-500 text-white px-4 py-1 rounded-bl-lg text-sm font-bold">
-                    Mais Popular
+                  <div className="bg-gradient-to-r from-violet-600 to-purple-600 text-white text-xs font-bold text-center py-2 tracking-wide uppercase">
+                    Mais popular
                   </div>
                 )}
 
-                <div className="p-8">
-                  {/* Plan Name */}
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                    {plano.name}
-                  </h3>
+                <div className={`p-6 sm:p-8 ${isPopular ? 'bg-white' : 'bg-white'}`}>
+                  {/* Plan name */}
+                  <h3 className="text-lg font-bold text-gray-900 mb-1">{plano.name}</h3>
+                  <p className="text-xs text-gray-400 mb-5">
+                    {isFree ? 'Para comecar a explorar' : isPopular ? 'Para lojistas em crescimento' : 'Para lojas estabelecidas'}
+                  </p>
 
                   {/* Price */}
                   <div className="mb-6">
-                    <span className="text-5xl font-bold text-gray-900">
-                      {isFree ? 'Grátis' : `${plano.price}`}
-                    </span>
-                    {!isFree && (
-                      <span className="text-gray-600 ml-2">/mês</span>
-                    )}
-                  </div>
-
-                  {/* CTA Button */}
-                  <button
-                    className={`w-full py-2 px-4 rounded-lg font-semibold mb-8 transition-colors ${
-                      isPopular
-                        ? 'bg-blue-500 text-white hover:bg-blue-600'
-                        : isFree
-                          ? 'bg-gray-300 text-gray-900 hover:bg-gray-400'
-                          : 'bg-blue-600 text-white hover:bg-blue-700'
-                    }`}
-                  >
-                    {isFree ? 'Começar Grátis' : 'Começar'}
-                  </button>
-
-                  {/* Main Features */}
-                  <div className="mb-8 pb-8 border-b border-gray-200">
-                    <div className="text-sm font-semibold text-gray-700 mb-3">
-                      Até {plano.max_products.toLocaleString()} produtos
-                    </div>
-                    {plano.custom_domain && (
-                      <div className="text-sm font-semibold text-gray-700">
-                        ✓ Domínio customizado
+                    {isFree ? (
+                      <span className="text-4xl font-bold text-gray-900">Gratis</span>
+                    ) : (
+                      <div className="flex items-end gap-1">
+                        <span className="text-4xl font-bold text-gray-900 tabular-nums">
+                          {plano.price}
+                        </span>
+                        <span className="text-gray-400 text-sm mb-1">/mes</span>
                       </div>
                     )}
                   </div>
 
-                  {/* Support Level */}
-                  <div className="mb-6 p-3 bg-gray-100 rounded">
-                    <p className="text-sm text-gray-700">
-                      <span className="font-semibold">Suporte:</span>{' '}
-                      <span className="capitalize">{plano.support_level}</span>
-                    </p>
+                  {/* CTA */}
+                  <a
+                    href={`/admin/signup?plano=${plano.slug}`}
+                    className={`flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl font-semibold text-sm transition-all duration-150 mb-7 ${
+                      isPopular
+                        ? 'bg-gradient-to-r from-violet-600 to-purple-600 text-white hover:from-violet-700 hover:to-purple-700 shadow-md shadow-violet-500/20'
+                        : isFree
+                          ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : 'bg-gray-900 text-white hover:bg-gray-800'
+                    }`}
+                  >
+                    {isFree ? 'Comecar Gratis' : 'Comecar agora'}
+                  </a>
+
+                  {/* Key highlights */}
+                  <div className="space-y-1 mb-5 pb-5 border-b border-gray-100">
+                    <div className="flex items-center gap-2 text-sm text-gray-700">
+                      <Check size={14} className="text-violet-500 shrink-0" />
+                      Ate {plano.max_products.toLocaleString('pt-BR')} produtos
+                    </div>
+                    {plano.custom_domain && (
+                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                        <Check size={14} className="text-violet-500 shrink-0" />
+                        Dominio customizado
+                      </div>
+                    )}
+                    <div className="flex items-center gap-2 text-sm text-gray-700">
+                      <Check size={14} className="text-violet-500 shrink-0" />
+                      Suporte {supportLabel[plano.support_level] || plano.support_level}
+                    </div>
                   </div>
 
-                  {/* Features List */}
-                  <div className="space-y-3">
-                    {featuresList.map((feature) => {
-                      const hasFeature = plano.features?.[feature.key] || false;
+                  {/* Features */}
+                  <div className="space-y-2.5">
+                    {featuresList.map((f) => {
+                      const has = plano.features?.[f.key] || false;
                       return (
-                        <div
-                          key={feature.key}
-                          className="flex items-start"
-                        >
-                          {hasFeature ? (
-                            <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
+                        <div key={f.key} className="flex items-center gap-2.5">
+                          {has ? (
+                            <Check size={14} className="text-violet-500 shrink-0" />
                           ) : (
-                            <X className="w-5 h-5 text-gray-300 mr-3 flex-shrink-0 mt-0.5" />
+                            <X size={14} className="text-gray-300 shrink-0" />
                           )}
-                          <span
-                            className={`text-sm ${
-                              hasFeature ? 'text-gray-700' : 'text-gray-400'
-                            }`}
-                          >
-                            {feature.label}
+                          <span className={`text-sm ${has ? 'text-gray-700' : 'text-gray-400'}`}>
+                            {f.label}
                           </span>
                         </div>
                       );
@@ -159,76 +182,44 @@ export function PricingPage() {
           })}
         </div>
 
-        {/* Comparison Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300 bg-white rounded-lg overflow-hidden">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="border border-gray-300 px-4 py-3 text-left font-semibold">
-                  Funcionalidade
-                </th>
-                {planos.map((plano) => (
-                  <th
-                    key={plano.id}
-                    className="border border-gray-300 px-4 py-3 text-center font-semibold"
-                  >
-                    {plano.name}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {featuresList.map((feature) => (
-                <tr key={feature.key} className="hover:bg-gray-50">
-                  <td className="border border-gray-300 px-4 py-3 font-medium">
-                    {feature.label}
-                  </td>
-                  {planos.map((plano) => (
-                    <td
-                      key={`${plano.id}-${feature.key}`}
-                      className="border border-gray-300 px-4 py-3 text-center"
-                    >
-                      {plano.features?.[feature.key] ? (
-                        <Check className="w-5 h-5 text-green-500 mx-auto" />
-                      ) : (
-                        <X className="w-5 h-5 text-gray-300 mx-auto" />
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Trust row */}
+        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-center mb-16 py-8 border-y border-gray-100">
+          {[
+            { label: 'Lojas ativas', value: '500+' },
+            { label: 'Pedidos processados', value: '12k+' },
+            { label: 'Uptime', value: '99.9%' },
+            { label: 'Suporte medio', value: '< 2h' },
+          ].map((s) => (
+            <div key={s.label}>
+              <p className="text-2xl font-bold text-gray-900 tabular-nums">{s.value}</p>
+              <p className="text-xs text-gray-400 mt-0.5">{s.label}</p>
+            </div>
+          ))}
         </div>
 
-        {/* FAQ Section */}
-        <div className="mt-16 max-w-2xl mx-auto">
-          <h2 className="text-2xl font-bold text-center mb-8">Dúvidas Frequentes</h2>
+        {/* FAQ */}
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">Duvidas frequentes</h2>
           <div className="space-y-6">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Posso mudar de plano a qualquer momento?
-              </h3>
-              <p className="text-gray-600">
-                Sim! Você pode fazer upgrade ou downgrade a qualquer momento. As mudanças entram em vigor no próximo período de cobrança.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                O plano Free tem alguma restrição?
-              </h3>
-              <p className="text-gray-600">
-                O plano Free permite até 10 produtos e suporte da comunidade. Para mais funcionalidades, escolha Starter ou Pro.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                Qual é o diferencial do plano Starter?
-              </h3>
-              <p className="text-gray-600">
-                O plano Starter (R$ 79/mês) oferece 200 produtos, domínio customizado e suporte por email. É perfeito para pequenos lojistas que querem crescer.
-              </p>
-            </div>
+            {[
+              {
+                q: 'Posso mudar de plano a qualquer momento?',
+                a: 'Sim. Upgrade ou downgrade entram em vigor no proximo periodo de cobranca, sem multa ou burocracia.',
+              },
+              {
+                q: 'O plano Free tem alguma restricao?',
+                a: 'O plano Free permite ate 10 produtos e suporte via comunidade. Para mais recursos, escolha Starter ou Pro.',
+              },
+              {
+                q: 'Qual o diferencial do Starter?',
+                a: 'O Starter oferece 200 produtos, dominio customizado e suporte por email — ideal para lojistas que querem crescer sem compromisso.',
+              },
+            ].map((faq) => (
+              <div key={faq.q} className="rounded-xl border border-gray-100 p-5">
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm sm:text-base">{faq.q}</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{faq.a}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
