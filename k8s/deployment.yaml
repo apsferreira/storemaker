@@ -39,6 +39,28 @@ spec:
                   key: JWT_SECRET
             - name: CORS_ORIGINS
               value: "https://storemaker.institutoitinerante.com.br"
+            # SM-001: MinIO — armazenamento de fotos de produtos
+            - name: MINIO_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: storemaker-secrets
+                  key: MINIO_ENDPOINT
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: storemaker-secrets
+                  key: MINIO_ACCESS_KEY
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: storemaker-secrets
+                  key: MINIO_SECRET_KEY
+            - name: MINIO_BUCKET
+              value: "storemake"
+            - name: MINIO_PUBLIC_URL
+              value: "https://storage.institutoitinerante.com.br"
+            - name: MINIO_USE_SSL
+              value: "false"
           resources:
             requests:
               cpu: 100m

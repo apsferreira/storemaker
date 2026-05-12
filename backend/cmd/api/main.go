@@ -14,6 +14,7 @@ import (
 	"github.com/apsferreira/storemaker/internal/middleware"
 	"github.com/apsferreira/storemaker/internal/pkg/config"
 	"github.com/apsferreira/storemaker/internal/pkg/database"
+	"github.com/apsferreira/storemaker/internal/pkg/storage"
 )
 
 func main() {
@@ -28,6 +29,13 @@ func main() {
 		log.Fatalf("falha ao conectar ao banco: %v", err)
 	}
 	defer database.Close()
+
+	// SM-001: inicializa cliente MinIO — obrigatório para upload de fotos de produtos.
+	storageClient, err := storage.New(cfg.MinIO)
+	if err != nil {
+		log.Fatalf("falha ao inicializar storage MinIO: %v", err)
+	}
+	handler.InitStorage(storageClient)
 
 	// BKL-144: WhatsApp Business Cloud API (opcional — sem credenciais a integração fica inativa)
 	handler.InitWhatsApp(cfg.WAPhoneNumberID, cfg.WAAccessToken)
@@ -64,9 +72,6 @@ func main() {
 
 	// Resolve loja pelo domínio customizado para requests de storefronts externos (BKL-143)
 	app.Use(middleware.DomainResolver())
-
-	// Servir uploads estáticos
-	app.Static("/uploads", "./uploads")
 
 	// Health check (público)
 	app.Get("/health", handler.HealthCheck)
