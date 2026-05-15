@@ -18,6 +18,17 @@ type Config struct {
 	WAAccessToken          string
 	WAWebhookVerifyToken   string
 	WAAppSecret            string // VUL-003: HMAC-SHA256 para validar X-Hub-Signature-256
+	MinIO                  MinIOConfig
+}
+
+// MinIOConfig contém as configurações de conexão com o MinIO.
+type MinIOConfig struct {
+	Endpoint  string // ex: 192.168.30.121:9000 (interno) ou minio:9000
+	AccessKey string
+	SecretKey string
+	Bucket    string
+	PublicURL string // ex: https://storage.institutoitinerante.com.br
+	UseSSL    bool
 }
 
 func Load() *Config {
@@ -27,13 +38,21 @@ func Load() *Config {
 		Env:                  getEnv("ENV", "development"),
 		Port:                 getEnv("PORT", "3080"),
 		DatabaseURL:          getEnv("DATABASE_URL", ""),
-		JWTSecret:            requireEnv("JWT_SECRET"),    // BKL-114: sem fallback — segredo crítico
-		CORSOrigins:          requireEnv("CORS_ORIGINS"),  // BKL-107: sem wildcard default — segurança
+		JWTSecret:            requireEnv("JWT_SECRET"),   // BKL-114: sem fallback — segredo crítico
+		CORSOrigins:          requireEnv("CORS_ORIGINS"), // BKL-107: sem wildcard default — segurança
 		WebhookSecret:        getEnv("WEBHOOK_SECRET", ""),
-		WAPhoneNumberID:      getEnv("WHATSAPP_PHONE_NUMBER_ID", ""),    // BKL-144: opcional
-		WAAccessToken:        getEnv("WHATSAPP_ACCESS_TOKEN", ""),       // BKL-144: opcional
+		WAPhoneNumberID:      getEnv("WHATSAPP_PHONE_NUMBER_ID", ""),     // BKL-144: opcional
+		WAAccessToken:        getEnv("WHATSAPP_ACCESS_TOKEN", ""),        // BKL-144: opcional
 		WAWebhookVerifyToken: getEnv("WHATSAPP_WEBHOOK_VERIFY_TOKEN", ""),
-		WAAppSecret:          getEnv("WHATSAPP_APP_SECRET", ""),         // VUL-003: validação HMAC
+		WAAppSecret:          getEnv("WHATSAPP_APP_SECRET", ""),          // VUL-003: validação HMAC
+		MinIO: MinIOConfig{
+			Endpoint:  getEnv("MINIO_ENDPOINT", "192.168.30.121:9000"),
+			AccessKey: getEnv("MINIO_ACCESS_KEY", ""),
+			SecretKey: getEnv("MINIO_SECRET_KEY", ""),
+			Bucket:    getEnv("MINIO_BUCKET", "storemake"),
+			PublicURL: getEnv("MINIO_PUBLIC_URL", "https://storage.institutoitinerante.com.br"),
+			UseSSL:    getEnv("MINIO_USE_SSL", "false") == "true",
+		},
 	}
 }
 

@@ -305,7 +305,7 @@ export function ProductsPage() {
             name="photos"
             accept="image/jpeg,image/png,image/webp,image/gif"
             multiple
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-light file:text-primary hover:file:bg-indigo-100"
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-primary-light file:text-primary hover:file:bg-violet-100"
           />
           <p className="text-xs text-muted">Formatos aceitos: JPEG, PNG, WebP, GIF. Max 5MB por foto.</p>
           <div className="flex justify-end gap-3">

@@ -125,6 +125,10 @@ export interface Order {
   created_at: string;
 }
 
+// 'moda'      → Moda Feminina (acessórios, vestuário feminino)
+// 'semi-joias' → Semi-joias & Premium (joias, luxo acessível)
+// 'festas'    → Jiu-Jitsu & Esportes (artigos de luta e fitness)
+// 'artesanato' → Food & Delivery (salgados, comida, delivery)
 export type TemplateTheme = 'moda' | 'semi-joias' | 'festas' | 'artesanato';
 
 export interface StoreConfig {

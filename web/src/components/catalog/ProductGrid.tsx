@@ -1,5 +1,6 @@
 import type { Product } from '../../types';
 import { ProductCard } from './ProductCard';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface ProductGridProps {
   products: Product[];
@@ -7,15 +8,17 @@ interface ProductGridProps {
 }
 
 export function ProductGrid({ products, loading }: ProductGridProps) {
+  const theme = useTheme();
+
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+      <div className={`grid ${theme.gridCols} gap-3 sm:gap-4 lg:gap-6`}>
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="animate-pulse">
-            <div className="aspect-square bg-gray-200 rounded-lg" />
+            <div className="aspect-square rounded-lg" style={{ backgroundColor: theme.borderColor }} />
             <div className="mt-3 space-y-2">
-              <div className="h-4 bg-gray-200 rounded w-3/4" />
-              <div className="h-5 bg-gray-200 rounded w-1/2" />
+              <div className="h-4 rounded w-3/4" style={{ backgroundColor: theme.borderColor }} />
+              <div className="h-5 rounded w-1/2" style={{ backgroundColor: theme.borderColor }} />
             </div>
           </div>
         ))}
@@ -36,7 +39,7 @@ export function ProductGrid({ products, loading }: ProductGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+    <div className={`grid ${theme.gridCols} gap-3 sm:gap-4 lg:gap-6`}>
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}

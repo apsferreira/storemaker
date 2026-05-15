@@ -99,7 +99,7 @@ export function ModulesPage() {
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <div className={`mt-0.5 shrink-0 ${mod.enabled ? 'text-indigo-600' : 'text-gray-300'}`}>
+                      <div className={`mt-0.5 shrink-0 ${mod.enabled ? 'text-violet-600' : 'text-gray-300'}`}>
                         {meta.icon}
                       </div>
                       <div>
@@ -119,8 +119,8 @@ export function ModulesPage() {
                     <button
                       onClick={() => handleToggle(mod.module, mod.enabled)}
                       disabled={updateMut.isPending}
-                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 shrink-0 ${
-                        mod.enabled ? 'bg-indigo-600' : 'bg-gray-200'
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 shrink-0 ${
+                        mod.enabled ? 'bg-violet-600' : 'bg-gray-200'
                       } disabled:opacity-50`}
                       aria-label={`${mod.enabled ? 'Desativar' : 'Ativar'} módulo ${meta.label}`}
                     >

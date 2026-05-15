@@ -1,29 +1,68 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #6366f1;
-  --color-primary-hover: #4f46e5;
-  --color-primary-light: #e0e7ff;
-  --color-success: #22c55e;
+  /* Storemake Admin — primary violet (IIT SaaS) */
+  --color-primary: #7c3aed;
+  --color-primary-hover: #6d28d9;
+  --color-primary-light: #ede9fe;
+
+  /* Semantic */
+  --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
   --color-info: #3b82f6;
+
+  /* Neutral surface */
   --color-muted: #6b7280;
   --color-border: #e5e7eb;
-  --color-bg: #f9fafb;
+  --color-bg: #f5f3ff;
   --color-card: #ffffff;
-  --color-sidebar: #1e1b4b;
-  --color-sidebar-hover: #312e81;
-  --color-sidebar-text: #c7d2fe;
+
+  /* Sidebar — dark violet, not indigo */
+  --color-sidebar: #1e0a3c;
+  --color-sidebar-hover: #2d1458;
+  --color-sidebar-text: #c4b5fd;
+  --color-sidebar-accent: #7c3aed;
 }
 
-body {
-  margin: 0;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background: var(--color-bg);
-  -webkit-font-smoothing: antialiased;
+@layer base {
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Scrollbar sutil */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d8b4fe;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a78bfa;
+  }
 }
 
-* {
-  box-sizing: border-box;
+/* Utilitários de animação */
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 }

@@ -25,25 +25,39 @@ function MetricCard({
   label,
   value,
   icon: Icon,
-  color,
+  gradient,
   subtitle,
+  trend,
 }: {
   label: string
   value: string | number
   icon: React.ElementType
-  color: string
+  gradient: string
   subtitle?: string
+  trend?: { value: string; positive: boolean }
 }) {
   return (
-    <Card>
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm text-muted">{label}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
-          {subtitle && <p className="text-xs text-muted mt-1">{subtitle}</p>}
+    <Card className="relative overflow-hidden animate-fade-in">
+      {/* Decorative blob */}
+      <div
+        className={`absolute -top-4 -right-4 w-20 h-20 rounded-full opacity-10 ${gradient}`}
+        aria-hidden="true"
+      />
+      <div className="flex items-start justify-between relative">
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-medium text-muted uppercase tracking-wide">{label}</p>
+          <p className="text-2xl font-bold text-gray-900 mt-1.5 tabular-nums">{value}</p>
+          {subtitle && (
+            <p className="text-xs text-muted mt-1">{subtitle}</p>
+          )}
+          {trend && (
+            <p className={`text-xs font-medium mt-1.5 ${trend.positive ? 'text-emerald-600' : 'text-red-500'}`}>
+              {trend.positive ? '+' : ''}{trend.value}
+            </p>
+          )}
         </div>
-        <div className={`p-3 rounded-lg ${color}`}>
-          <Icon size={20} className="text-white" />
+        <div className={`p-2.5 rounded-xl ${gradient} shadow-sm shrink-0`}>
+          <Icon size={18} className="text-white" />
         </div>
       </div>
     </Card>
@@ -124,33 +138,37 @@ export function DashboardPage() {
           label="Vendas Hoje"
           value={formatCents(todayRevenue)}
           icon={DollarSign}
-          color="bg-green-500"
-          subtitle={`${todayOrders.length} pedidos`}
+          gradient="bg-gradient-to-br from-violet-500 to-purple-600"
+          subtitle={`${todayOrders.length} pedido${todayOrders.length !== 1 ? 's' : ''}`}
         />
         <MetricCard
           label="Vendas no Mes"
           value={formatCents(monthRevenue)}
           icon={TrendingUp}
-          color="bg-blue-500"
+          gradient="bg-gradient-to-br from-emerald-500 to-teal-600"
         />
         <MetricCard
           label="Pedidos Pendentes"
           value={pendingOrders.length}
           icon={ShoppingCart}
-          color="bg-amber-500"
+          gradient="bg-gradient-to-br from-amber-400 to-orange-500"
+          subtitle={pendingOrders.length > 0 ? 'Aguardando acao' : 'Tudo em dia'}
         />
         <MetricCard
           label="Estoque Baixo"
           value={lowStock.length}
           icon={AlertTriangle}
-          color={lowStock.length > 0 ? 'bg-red-500' : 'bg-gray-400'}
+          gradient={lowStock.length > 0
+            ? 'bg-gradient-to-br from-red-500 to-rose-600'
+            : 'bg-gradient-to-br from-gray-400 to-gray-500'}
+          subtitle={lowStock.length > 0 ? 'Reposicao necessaria' : 'Estoque saudavel'}
         />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart */}
         <Card className="lg:col-span-2">
-          <h3 className="text-sm font-medium text-muted mb-4">Vendas - Ultimos 7 dias</h3>
+          <h3 className="text-sm font-semibold text-gray-800 mb-4">Vendas — ultimos 7 dias</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
@@ -162,7 +180,7 @@ export function DashboardPage() {
                     new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
                   }
                 />
-                <Bar dataKey="vendas" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="vendas" fill="#7c3aed" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

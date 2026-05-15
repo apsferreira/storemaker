@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	defaultAPIURL     = "https://pulse-api.institutoitinerante.com.br"
+	defaultAPIURL     = "https://pulse.institutoitinerante.com.br"
 	defaultProjectKey = "storemake"
 )
 

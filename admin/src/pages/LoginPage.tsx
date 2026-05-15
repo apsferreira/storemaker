@@ -48,19 +48,39 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg px-4">
-      <div className="w-full max-w-sm">
+    <div
+      className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+      style={{ background: 'linear-gradient(135deg, #1e0a3c 0%, #2d1458 50%, #3b1f6b 100%)' }}
+    >
+      {/* Background decoration */}
+      <div
+        className="absolute -top-24 -left-24 w-96 h-96 rounded-full opacity-20"
+        style={{ background: 'radial-gradient(circle, #7c3aed, transparent)' }}
+        aria-hidden="true"
+      />
+      <div
+        className="absolute -bottom-32 -right-16 w-80 h-80 rounded-full opacity-15"
+        style={{ background: 'radial-gradient(circle, #a855f7, transparent)' }}
+        aria-hidden="true"
+      />
+
+      <div className="w-full max-w-sm relative">
+        {/* Brand */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mb-3">
-            <Store size={24} className="text-white" />
+          <div className="w-14 h-14 bg-gradient-to-br from-violet-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-xl shadow-violet-900/50">
+            <Store size={26} className="text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">StoreMaker</h1>
-          <p className="text-sm text-muted mt-1">Acesse o painel admin</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Storemake</h1>
+          <p className="text-sm text-violet-300/70 mt-1">Painel de gestao da loja</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl shadow-sm border border-border space-y-4">
+        {/* Form */}
+        <div className="bg-white/95 backdrop-blur-sm p-7 rounded-2xl shadow-2xl shadow-black/30 border border-white/10 space-y-4">
           {error && (
-            <div className="bg-red-50 text-danger text-sm p-3 rounded-lg">{error}</div>
+            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg border border-red-100 flex items-start gap-2">
+              <span className="shrink-0 mt-0.5">!</span>
+              <span>{error}</span>
+            </div>
           )}
 
           <Input
@@ -78,15 +98,19 @@ export function LoginPage() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="********"
+            placeholder="••••••••"
             required
             autoComplete="current-password"
           />
 
-          <Button type="submit" loading={loading} className="w-full">
-            Entrar
+          <Button type="submit" loading={loading} className="w-full mt-1">
+            Entrar no painel
           </Button>
-        </form>
+        </div>
+
+        <p className="text-center text-xs text-violet-300/40 mt-6">
+          Storemake &copy; {new Date().getFullYear()} — Instituto Itinerante
+        </p>
       </div>
     </div>
   )

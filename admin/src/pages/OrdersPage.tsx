@@ -14,7 +14,7 @@ import type { Order, OrderStatus } from '@/types'
 const COLUMNS: { status: OrderStatus; label: string; color: string }[] = [
   { status: 'pendente', label: 'Pendente', color: 'bg-amber-500' },
   { status: 'pago', label: 'Pago', color: 'bg-blue-500' },
-  { status: 'preparando', label: 'Preparando', color: 'bg-indigo-500' },
+  { status: 'preparando', label: 'Preparando', color: 'bg-violet-500' },
   { status: 'enviado', label: 'Enviado', color: 'bg-purple-500' },
   { status: 'entregue', label: 'Entregue', color: 'bg-green-500' },
 ]

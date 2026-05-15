@@ -21,7 +21,7 @@ import {
 } from 'recharts'
 import type { Order, Product } from '@/types'
 
-const COLORS = ['#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#3b82f6', '#8b5cf6', '#ec4899', '#14b8a6']
+const COLORS = ['#7c3aed', '#10b981', '#f59e0b', '#ef4444', '#3b82f6', '#a855f7', '#ec4899', '#14b8a6']
 
 type Period = '7d' | '30d' | '90d'
 
@@ -156,7 +156,7 @@ export function ReportsPage() {
                   new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
                 }
               />
-              <Line type="monotone" dataKey="vendas" stroke="#6366f1" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="vendas" stroke="#7c3aed" strokeWidth={2} dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -180,7 +180,7 @@ export function ReportsPage() {
                       new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v)
                     }
                   />
-                  <Bar dataKey="revenue" fill="#6366f1" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="revenue" fill="#7c3aed" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}
